@@ -44,89 +44,7 @@ console.log(healthcare)
  
  var 
 })
-
-// append svg for y coordinates specified 
-// poverty
-xText   
-   .append("text")
-   .attr("y", -26)
-   .attr("data-name", "poverty")
-   .attr("data-axis", "x")
-   .attr("class", "aText active x")
-   .text("In poverty (%)");
-
-// age
-xText
-   .append("text")
-   .attr("y", 0)
-   .attr("data-name", "age")
-   .attr("data-axis", "x")
-   .attr("class", "aText inactive x")
-   .text("Age (Median)");
-
- // income
- xText
-   .append("text")
-   .attr("y", 26)
-   .attr("data-name", "income")
-   .attr("data-axis", "x")
-   .attr("class", "aText inactive x")
-   .text("Househole Income (Median)");
-
- //left axis----specify the variables for readability and transformation attributes   
- var leftTextX = margin + tPadLeft;
- var leftTextX = (height + labelArea) /2 - labelArea;
  
-
- //add second labels group for left axis chart
- svg.append("g").attr("class", "yText");
- 
- // yText will select only the group while elimating additional data
- var yText = d3.select(".yText");
-
- //nest the group transform attr in a function allowing for changes-operation
-
- function yTextRefresher(){
-     yText.attr(
-         "transform",
-         "translate",
-         "translate(" + leftTextX + ", " + leftTextY + ")rotate(-90)"
-
-     );
-
- }
- yTextRefresher();
-
- // append obseity, smokes, and the that lack healthcare
- //obesity
- yText
-    .append("text")
-    .attr("y", -26)
-    .attr("data-name", "obesity")
-    .attr("data-axis", "y")
-    .attr("class", "aText active y")
-    .text("Obese (%)");
-
-// Smokes
-yText
-   .append("text")
-   .attr("y", 0)
-   .attr("data-name", "smokes")
-   .attr("data-axis", "y")
-   .attr("class", "aText active y")
-   .text("Smokes (%)");
-   
-//lack healthcare
-yText
-   .append("text")
-   .attr("y", 26)
-   .attr("data-name", "healthcare")
-   .attr("data-axis", "y")
-   .attr("class", "aText active y")
-   .text("Lacks Healthcare (%)");
-
-});
-
 //create cirles
 var cirlesGroups = chartGroup.selectAll("circle")
 .data(healthcare)
@@ -140,11 +58,6 @@ var cirlesGroups = chartGroup.selectAll("circle")
 .on("mouseout", function(data, index) {
   toolTip.hide(data);
 })
-//use the function tool-tip to retrieve and grab data
-var toolTip = d3.tip()
-  .tip()
-  .attr("class", "toolTip")
-  .offset([40, -60])
-  .html(function(d){
+
      
     
