@@ -1,4 +1,5 @@
 
+
 // Grab data for aniamation
  //height of the graph
 var svgWidth = 960
@@ -27,13 +28,13 @@ var chartGroup = svg.append("g")
 d3.select("body").append("div").attr("clas", "tooltip").style("opacity", 0);  
 
 //import Data from csv
-d3.csv("data.csv", function (err, healthDare) {
+d3.csv("data.csv", function (err, healthData) {
   if (err)throw err;
 console.log(healthcare)
    //Parse Data/ as numbers
    healthData.forEach(function(data){
      data.poverty = +data.poverty;
-     data.heatlhcare = +data.healthcare;
+     data.healthcare = +data.healthcare;
    });
  var xScale = d3.scalelinear().range([0,width]);
  var yScale = d3.scalelinear().range([height, 0]); 
@@ -42,9 +43,42 @@ console.log(healthcare)
  var bottomAxis = d3.axisBottom(xScale);
  var leftAxis = d3.axisLeft(yScale);
  
- var 
-})
- 
+  var xMin;
+  var xMax;
+  var yMin;
+  var yMax;
+  
+  xMin = d3.min(healthData, function(data) {
+      return data.healthcare;
+  });
+  
+  xMax = d3.max(healthData, function(data) {
+      return data.healthcare;
+  });
+  
+  yMin = d3.min(healthData, function(data) {
+      return data.poverty;
+  });
+  
+  yMax = d3.max(healthData, function(data) {
+      return data.poverty;
+  });
+  
+  xLinearScale.domain([xMin, xMax]);
+  yLinearScale.domain([yMin, yMax]);
+  console.log(xMin);
+  console.log(yMax);
+
+
+// Append axes fro circle charts
+
+chartGroup.append("g")
+ .attr("transform", `translate(0, ${height})`)
+ .call(bottomAxis);
+
+chartGroup.append("g")
+ .call(leftAxis);
+
 //create cirles
 var cirlesGroups = chartGroup.selectAll("circle")
 .data(healthcare)
@@ -58,6 +92,58 @@ var cirlesGroups = chartGroup.selectAll("circle")
 .on("mouseout", function(data, index) {
   toolTip.hide(data);
 })
-
+//use the function tool-tip to retrieve and grab data
+var toolTip = d3.tip()
+  .tip()
+  .attr("class", "toolTip")
+  .offset([40, -60])
+  .html(function(d){
      
-    
+    eturn (abbr + '%');
+  });
+
+// Create tooltip in the chart
+
+chartGroup.call(toolTip);
+
+// create event listeners to display and hide the tooltip
+
+circlesGroup.on("click", function(data) {
+toolTip.show(data);
+})
+// onmouseout event
+.on("mouseout", function(data, index) {
+  toolTip.hide(data);
+});
+
+// Create axes labels
+
+chartGroup.append("text")
+.style("font-size", "12px")
+.selectAll("tspan")
+.data(healthData)
+.enter()
+.append("tspan")
+  .attr("x", function(data) {
+      return xLinearScale(data.healthcare +1.3);
+  })
+  .attr("y", function(data) {
+      return yLinearScale(data.poverty +.1);
+  })
+  .text(function(data) {
+      return data.abbr
+  });
+
+  chartGroup.append("text")
+  .attr("transform", "rotate(-90)")
+  .attr("y", 0 - margin.left + 40)
+  .attr("x", 0 - (height / 2))
+  .attr("dy", "1em")
+  .attr("class", "axisText")
+  .text("Lacks Healtcare(%)");
+
+chartGroup.append("g")
+  .attr("transform", `translate(${width / 2}, ${height + margin.top + 30})`)
+  .attr("class", "axisText")
+  .text("In Poverty (%)");
+}); 
